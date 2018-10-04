@@ -1,0 +1,8 @@
+{
+  "name": "PDD",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular",
+  "pro_id": "1b732f0d"
+}
