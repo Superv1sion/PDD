@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class HomePage {
 
   constructor(public navCtrl: NavController, public http: HttpClient) {
-    this.http.get<any[]>('assets/data-rus.min.json').subscribe(data => {
+    this.http.get<any[]>('assets/data/data-rus.json').subscribe(data => {
       var themes = document.getElementById("themes");
       data.forEach(function(element, index) {
         var li = document.createElement("li");
