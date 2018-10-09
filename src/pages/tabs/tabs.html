@@ -1,5 +1,6 @@
 <ion-tabs>
-  <ion-tab [root]="tab1Root" tabTitle="Меню" tabIcon="menu"></ion-tab>
-  <ion-tab [root]="tab2Root" tabTitle="Задания" tabIcon="clipboard"></ion-tab>
-  <ion-tab [root]="tab3Root" tabTitle="Статистика" tabIcon="analytics"></ion-tab>
+  <ion-tab [root]="tab1Root" tabIcon="menu"></ion-tab>
+  <ion-tab [root]="tab2Root" tabIcon="school"></ion-tab>
+  <ion-tab [root]="tab3Root" tabIcon="analytics"></ion-tab>
+  <ion-tab (ionSelect)="openMenu();" tabIcon="more"></ion-tab>
 </ion-tabs>
