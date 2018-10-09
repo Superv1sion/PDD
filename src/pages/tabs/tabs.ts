@@ -15,7 +15,7 @@ export class TabsPage {
   tab3Root = ContactPage;
 
   constructor(public menuCtrl: MenuController) {
-    
+    this.menuCtrl.enable(true);
   }
 
   openMenu(){
