@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { MenuController } from 'ionic-angular';
 
-import { AboutPage } from '../about/about';
-import { ContactPage } from '../contact/contact';
+import { WorkPage } from '../work/work';
+import { StatPage } from '../stat/stat';
 import { HomePage } from '../home/home';
 
 @Component({
@@ -11,8 +11,8 @@ import { HomePage } from '../home/home';
 export class TabsPage {
 
   tab1Root = HomePage;
-  tab2Root = AboutPage;
-  tab3Root = ContactPage;
+  tab2Root = WorkPage;
+  tab3Root = StatPage;
 
   constructor(public menuCtrl: MenuController) {
     this.menuCtrl.enable(true);

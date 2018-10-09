@@ -1,17 +1,10 @@
-<!--ion-header>
-  <ion-navbar>
-    <ion-title>Home</ion-title>
-  </ion-navbar>
-</ion-header-->
+<ion-header>
+  <!--ion-navbar>
+    <ion-title>Темы</ion-title>
+  </ion-navbar-->
+</ion-header>
 
-<ion-content padding>
-  <div id="tickets">
-    <h2>Билеты:</h2>
-    <li><a href="#">Все билеты</a></li>
-  </div>
-  <p></p>
-  <div id="themes">
-    <h2>Темы:</h2>
-    <!--Data loads by constructor-->
-  </div>
+<ion-content padding text-center>
+    <button ion-button block small outline><b>Случайная тема</b></button>
+    <button ion-button block small outline *ngFor="let t of themes">{{t}}</button>
 </ion-content>

@@ -5,8 +5,8 @@ import { IonicStorageModule } from '@ionic/storage';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
-import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
+import { WorkPage } from '../pages/work/work';
+import { StatPage } from '../pages/stat/stat';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 
@@ -17,8 +17,8 @@ import { File } from '@ionic-native/file';
 @NgModule({
   declarations: [
     MyApp,
-    AboutPage,
-    ContactPage,
+    WorkPage,
+    StatPage,
     HomePage,
     TabsPage
   ],
@@ -31,8 +31,8 @@ import { File } from '@ionic-native/file';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    AboutPage,
-    ContactPage,
+    WorkPage,
+    StatPage,
     HomePage,
     TabsPage
   ],
