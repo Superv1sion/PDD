@@ -5,6 +5,15 @@
 </ion-header>
 
 <ion-content padding text-center>
-    <button ion-button block small outline><b>Случайная тема</b></button>
-    <button ion-button block small outline *ngFor="let t of themes">{{t}}</button>
+    <ion-title>Тестирование</ion-title>
+    <button ion-button full color="light" icon-end>
+      Случайный билет с вопросами
+      <ion-icon name="arrow-forward"></ion-icon>
+    </button>
+
+    <ion-title>Темы</ion-title>
+    <button ion-button full color="light" icon-end *ngFor="let t of themes">
+      {{t}}
+      <ion-icon name="arrow-forward"></ion-icon>
+    </button>
 </ion-content>
