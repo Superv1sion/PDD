@@ -4,16 +4,16 @@
   </ion-navbar-->
 </ion-header>
 
-<ion-content padding text-center>
+<ion-content padding text-center class="page-home">
     <ion-title>Тестирование</ion-title>
-    <button ion-button full color="light" icon-end>
+    <button ion-button full color="light" icon-end text-wrap>
       Случайный билет с вопросами
       <ion-icon name="arrow-forward"></ion-icon>
     </button>
 
     <ion-title>Темы</ion-title>
-    <button ion-button full color="light" icon-end *ngFor="let t of themes">
-      {{t}}
+    <button ion-button full color="light" icon-end text-wrap *ngFor="let d of data" (click)="startTasks(d);">
+      {{d.theme}}
       <ion-icon name="arrow-forward"></ion-icon>
     </button>
 </ion-content>

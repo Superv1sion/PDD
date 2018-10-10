@@ -1,6 +1,4 @@
-page-home{
-
-}
+page-home{}
 ion-title {
     text-align: left;
     padding-left: 0px;
@@ -8,7 +6,12 @@ ion-title {
     padding-top: 8px;
     padding-bottom: 8px;
 }
+.button-md{
+    height: 60px;
+}
 .button-inner{
+    padding-right: 25px;
+    text-align: left;
     justify-content: flex-start;
     text-transform: none;
 }.button .icon {

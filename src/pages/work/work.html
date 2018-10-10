@@ -1,9 +1,15 @@
 <ion-header>
-  <!--ion-navbar>
-    <ion-title>Тестирование</ion-title>
-  </ion-navbar-->
+  <ion-navbar *ngIf="dataFiled">
+    <ion-title>{{data.theme}}</ion-title>
+  </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-
+  <div *ngIf="dataFiled">
+    <div class="question-block" *ngFor="let question of data.question">
+      <ion-row class="question-text">{{question.text}}</ion-row>
+      <ion-row *ngIf="question.image"><img src="assets/{{question.image}}"/></ion-row>
+      <ion-row *ngFor="let answer of question.answer"><button ion-button round outline text-wrap>{{answer.text}}</button></ion-row>
+    </div>
+  </div>
 </ion-content>

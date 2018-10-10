@@ -1,3 +1,20 @@
 page-about {
 
 }
+ion-title {
+  overflow: visible;
+  position: relative;
+    .subtitle {
+        position: absolute;
+        top: 8px;
+        font-size: 66%;
+    }
+}
+.question-block {
+    padding-bottom: 20px;
+}
+.question-text {
+    padding-bottom: 10px; 
+    font-weight: bold;
+    font-size: 16px;
+}

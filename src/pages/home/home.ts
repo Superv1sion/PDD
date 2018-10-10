@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, Events } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -8,19 +8,19 @@ import { HttpClient } from '@angular/common/http';
 })
 export class HomePage {
 
-  themes = [];
+  data = [];
 
-  constructor(public navCtrl: NavController, public http: HttpClient) {
+  constructor(public navCtrl: NavController, public http: HttpClient, public events: Events) {
     this.loadThemes();
   }
 
   loadThemes(){
-    var themes = [];
     this.http.get<any[]>('assets/data/data-rus.json').subscribe(data => {
-      data.forEach(function(element, index) {
-        themes.push(element.theme);
-      });
+      this.data = data;
     });
-    this.themes = themes;
+  }
+
+  startTasks(theme){
+    this.events.publish('theme:chosen', theme);
   }
 }
