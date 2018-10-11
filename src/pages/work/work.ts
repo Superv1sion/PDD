@@ -27,7 +27,7 @@ export class WorkPage {
   }
 
   choseQuestion(index){
-    if(this.data.question) {
+    if(this.data.question[index]) {
       this.slides.slideTo(index);
       this.currentQuestion = [];
       this.currentQuestion = this.data.question[index];
@@ -37,8 +37,6 @@ export class WorkPage {
   answerQuestion(answer){
     //TODO: set style of buttons if answer is correct;
     console.log(answer.correct);
-    if(!this.slides.isEnd()){
-      this.choseQuestion(this.slides.getActiveIndex()+1);
-    }
+    this.choseQuestion(this.slides.getActiveIndex()+1);
   }
 }
