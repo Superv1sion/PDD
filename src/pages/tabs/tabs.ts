@@ -24,6 +24,9 @@ export class TabsPage {
         events.publish('theme:start:solve', theme);
       });
     });
+    events.subscribe('chose:task', () => {
+      this.tabRef.select(0);
+    });
   }
 
   openMenu(){

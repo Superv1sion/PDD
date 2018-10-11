@@ -5,11 +5,45 @@
 </ion-header>
 
 <ion-content padding>
+
+  <div class="no-data" *ngIf="!dataFiled">
+    <ion-grid>
+      <ion-row>
+        <ion-col text-center>
+          <button ion-button outline text-wrap large round (click)="choseTask();">
+            Выберите билет или тему, для начала тестирования
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  
+  
   <div *ngIf="dataFiled">
-    <div class="question-block" *ngFor="let question of data.question">
-      <ion-row class="question-text">{{question.text}}</ion-row>
-      <ion-row *ngIf="question.image"><img src="assets/{{question.image}}"/></ion-row>
-      <ion-row *ngFor="let answer of question.answer"><button ion-button round outline text-wrap>{{answer.text}}</button></ion-row>
+    <ion-slides slidesPerView="5" #slider>
+      <ion-slide *ngFor="let question of data.question; let i = index">
+          <button ion-button outline round text-wrap color="dark" (click)="choseQuestion(i);">{{i+1}}</button>
+      </ion-slide>
+    </ion-slides>
+
+    <div class="question-block">
+      
+      <ion-row class="question-text">
+        {{currentQuestion.text}}
+      </ion-row>
+
+      <ion-row *ngIf="currentQuestion.image">
+        <img  class="question-image" src="assets/{{currentQuestion.image}}"/>
+      </ion-row>
+
+      <ion-row *ngFor="let answer of currentQuestion.answer">
+        <ion-col>
+          <button ion-button outline text-wrap (click)="answerQuestion(answer);">
+            {{answer.text}}
+          </button>
+        </ion-col>
+      </ion-row>
+
     </div>
   </div>
 </ion-content>

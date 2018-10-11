@@ -1,26 +1,30 @@
-page-home{}
-ion-title {
-    text-align: left;
-    padding-left: 0px;
-    padding-right: 8px;
-    padding-top: 8px;
-    padding-bottom: 8px;
-}
-.button-md{
-    height: 60px;
-}
-.button-inner{
-    padding-right: 25px;
-    text-align: left;
-    justify-content: flex-start;
-    text-transform: none;
-}.button .icon {
-    position: absolute;
-    top: 50%;
-    right: 20px;
-    height: 50%;
-    transform: translate(-50%, -50%);
-    width: 10px;
-    height: 10px;
-    display: block;
+page-home {
+    .home-content {
+        background-color: grey;
+    }
+    .home-title {
+        text-align: left;
+        padding-left: 0px;
+        padding-right: 8px;
+        padding-top: 20px;
+        padding-bottom: 8px;
+    }
+    .button-md {
+        height: 60px;
+    }
+    .button-inner{
+        padding-right: 25px;
+        text-align: left;
+        justify-content: flex-start;
+        text-transform: none;
+    }.button .icon {
+        position: absolute;
+        top: 50%;
+        right: 20px;
+        height: 50%;
+        transform: translate(-50%, -50%);
+        width: 10px;
+        height: 10px;
+        display: block;
+    }
 }
