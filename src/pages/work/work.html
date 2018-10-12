@@ -20,27 +20,34 @@
   
   
   <div *ngIf="dataFiled">
-    <ion-slides slidesPerView="5" #slider>
-      <ion-slide *ngFor="let question of data.question; let i = index">
-          <button ion-button outline round text-wrap color="dark" (click)="choseQuestion(i);">{{i+1}}</button>
-      </ion-slide>
+    <ion-slides slidesPerView="5" centeredSlides="true" #slider>
+      <ion-slide *ngFor="let question of data.question">
+          <button *ngIf="question.answer_index==-1; else answered_button" ion-button outline round text-wrap color="dark" (click)="choseQuestion(question.index);">{{question.index+1}}</button>
+          <ng-template #answered_button>
+              <button *ngIf="question.answer[question.answer_index].correct" ion-button round text-wrap color="secondary" (click)="choseQuestion(question.index);">{{question.index+1}}</button>
+              <button *ngIf="!question.answer[question.answer_index].correct" ion-button round text-wrap color="danger" (click)="choseQuestion(question.index);">{{question.index+1}}</button>
+          </ng-template>
+        </ion-slide>
     </ion-slides>
 
-    <div class="question-block">
+    <div class="question-block" (swipe)="swipeEvent($event, currentQuestion.index)">
       
       <ion-row class="question-text">
         {{currentQuestion.text}}
       </ion-row>
 
-      <ion-row *ngIf="currentQuestion.image">
-        <img  class="question-image" src="assets/{{currentQuestion.image}}"/>
+      <ion-row *ngIf="currentQuestion.image" justify-content-center>
+        <img class="question-image" src="assets/{{currentQuestion.image}}"/>
       </ion-row>
 
-      <ion-row *ngFor="let answer of currentQuestion.answer">
+      <ion-row *ngFor="let answer of currentQuestion.answer; let answerIndex = index">
         <ion-col>
-          <button ion-button outline text-wrap (click)="answerQuestion(answer);">
-            {{answer.text}}
-          </button>
+          <button *ngIf="currentQuestion.answer_index==-1; else answered" ion-button round outline text-wrap (click)="answerQuestion(answerIndex, currentQuestion.index+1);">{{answer.text}}</button>
+          <ng-template #answered>
+              <button *ngIf="answer.correct" ion-button text-wrap color="secondary">{{answer.text}}</button>
+              <button *ngIf="!answer.correct && currentQuestion.answer_index==answerIndex" ion-button text-wrap color="danger">{{answer.text}}</button>
+              <button *ngIf="currentQuestion.answer_index!=answerIndex && !answer.correct" ion-button outline text-wrap color="dark">{{answer.text}}</button>
+          </ng-template>
         </ion-col>
       </ion-row>
 

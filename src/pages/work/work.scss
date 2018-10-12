@@ -30,18 +30,17 @@ page-work {
         border: 1px solid #808080;
         background: #efefef;
         padding: 15px;
-        .button-md{
+        .button{
             width: 100%;
             height: auto;
             padding: 15px;
             display: inline-block;
-            border-radius: 30px;
+            border-radius: 20px;
         }    
         .button-inner {
-            padding-right: 0;
             text-align: left;
-            justify-content: flex-start;
             text-transform: none;
+            justify-content: flex-start;
         }
         .question-text {
             padding-bottom: 12px; 
@@ -49,10 +48,13 @@ page-work {
             font-size: 14px;
         }
         .question-image {
-            display: flex;
-            height: auto;
-            border-radius: 5px;
-            margin-bottom: 12px;
+            border: 1px solid #808080;
+            border-radius: 20px;
+            background: #e0e0e0;
+            object-fit: scale-down;
+            width: 600px;
+            height: 300px;
+            margin-bottom: 10px;
         }
     }
 }

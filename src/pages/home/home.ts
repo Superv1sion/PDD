@@ -23,4 +23,22 @@ export class HomePage {
   startTasks(theme){
     this.events.publish('theme:chosen', theme);
   }
+
+  startRandomTasks(){
+    var theme = {
+      theme: "Случайный билет с вопросами",
+      question: []
+    };
+    var history = [];
+
+    while(theme.question.length!=20) {
+      var first = Math.floor(Math.random()*(this.data.length));
+      var second = Math.floor(Math.random()*(this.data[first].question.length));
+      if (!history.some(e => e.first === first && e.second === second)) {
+        history.push({ 'first': first, 'second': second});
+        theme.question.push(this.data[first].question[second]);
+      }
+    }
+    this.events.publish('theme:chosen', theme);
+  }
 }
