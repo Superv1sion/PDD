@@ -4,8 +4,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-
+<ion-content>
   <div class="no-data" *ngIf="!dataFiled">
     <ion-grid>
       <ion-row>
@@ -19,7 +18,7 @@
   </div>
   
   
-  <div *ngIf="dataFiled">
+  <div *ngIf="dataFiled && !testEnded">
     <ion-slides slidesPerView="5" centeredSlides="true" #slider>
       <ion-slide *ngFor="let question of data.question">
           <button *ngIf="question.answer_index==-1; else answered_button" ion-button outline round text-wrap color="dark" (click)="choseQuestion(question.index);">{{question.index+1}}</button>
@@ -37,7 +36,7 @@
       </ion-row>
 
       <ion-row *ngIf="currentQuestion.image" justify-content-center>
-        <img class="question-image" src="assets/{{currentQuestion.image}}"/>
+        <img class="question-image" src="assets/{{currentQuestion.image}}" imageViewer/>
       </ion-row>
 
       <ion-row *ngFor="let answer of currentQuestion.answer; let answerIndex = index">
@@ -52,5 +51,43 @@
       </ion-row>
 
     </div>
+  </div>
+
+  
+  <div class="end-data" *ngIf="testEnded">
+    <ion-grid text-center>
+
+      <ion-row>
+        <ion-col>
+          <b>Правильных ответов: {{rightAnswersCount()}} из {{data.question.length}}</b>
+        </ion-col>
+      </ion-row>
+
+      <ion-row style="padding-left: 25%; padding-right: 25%;">
+        <ion-col>
+          <div class="result-markers" *ngFor="let q of data.question; let i = index">
+            <div *ngIf="q.answer[q.answer_index.toString()].correct" class="correct"><b>{{i+1}}</b></div>
+            <div *ngIf="!q.answer[q.answer_index.toString()].correct" class="wrong"><b>{{i+1}}</b></div>
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          <button ion-button outline full text-wrap>
+            Работа над ошибками
+          </button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          <button ion-button outline full text-wrap>
+            Закончить тест
+          </button>
+        </ion-col>
+      </ion-row>
+      
+    </ion-grid>
   </div>
 </ion-content>

@@ -16,44 +16,89 @@ page-work {
             text-transform: none;
         }
     }
+    .end-data {
+        height: 100%;
+        justify-content: center;
+        ion-grid {
+            height: 100%;
+            justify-content: center;
+        }
+        ion-row {
+            padding-left: 15%;
+            padding-right: 15%;
+        }
+        ion-col {
+            align-items: center;
+        }
+        .result-markers {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            margin: 3px;
+            .correct {
+                width: 30px;
+                height: 30px;
+                padding: 0px;
+                margin: 0px;
+                display: table-cell;
+                vertical-align: middle;
+                text-align: center;  
+                background-color: #32db64;
+                border: 1px solid #32db64;
+                box-shadow: 1px 1px 2px 0px darkgray;
+                border-radius: 10px;
+            }
+            .wrong {
+                width: 30px;
+                height: 30px;
+                padding: 0px;
+                margin: 0px;
+                display: table-cell;
+                vertical-align: middle;
+                text-align: center;  
+                background-color: #f53d3d;
+                border: 1px solid #f53d3d;
+                box-shadow: 1px 1px 2px 0px darkgray;
+                border-radius: 10px;
+            }
+        }
+    }
     ion-slides {
-        border: 1px solid #808080;
-        background: #efefef;
-        padding: 5px;
-        margin-bottom: 10px;
+        margin: 7px;
         button {
             width: 10px !important;
         }
     }
+    
     .question-block {
-        border-radius: 10px;
-        border: 1px solid #808080;
-        background: #efefef;
-        padding: 15px;
+        margin: 10px;
         .button{
+            margin: 0px;
+            padding: 10px;
             width: 100%;
             height: auto;
-            padding: 15px;
             display: inline-block;
             border-radius: 20px;
         }    
         .button-inner {
+            color: black;
             text-align: left;
             text-transform: none;
             justify-content: flex-start;
         }
         .question-text {
-            padding-bottom: 12px; 
+            padding-bottom: 5px; 
             font-weight: bold;
             font-size: 14px;
         }
         .question-image {
-            border: 1px solid #808080;
+            display: flex;
+            border: 1px solid grey;
             border-radius: 20px;
-            background: #e0e0e0;
-            object-fit: scale-down;
-            width: 600px;
-            height: 300px;
+            background: lightgrey;
+            object-fit: cover;
+            width: 100%;
+            height: 200px;
             margin-bottom: 10px;
         }
     }

@@ -8,6 +8,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class HomePage {
 
+  searchString = '';
+  openSearch = false;
   data = [];
 
   constructor(public navCtrl: NavController, public http: HttpClient, public events: Events) {
@@ -18,6 +20,16 @@ export class HomePage {
     this.http.get<any[]>('assets/data/data-rus.json').subscribe(data => {
       this.data = data;
     });
+  }
+
+  setSearchString(val){
+    if (val && val.trim() !== '') this.searchString = val;
+    else this.searchString = '';
+  }
+
+  searchContainTheme(theme){
+    if(theme.toLowerCase().includes(this.searchString.toLowerCase()) || this.searchString === '') return true;
+    else return false;
   }
 
   startTasks(theme){

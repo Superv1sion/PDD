@@ -4,15 +4,34 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding text-center class="home-constent">
+<ion-content text-center class="home-constent">
+  <div class="themes">
     <button (click)="startRandomTasks();" ion-button full color="light" icon-end text-wrap class="home-button">
       Случайный билет с вопросами
       <ion-icon name="arrow-forward"></ion-icon>
     </button>
+  </div>  
 
-    <ion-title class="home-title">Темы для подготовки</ion-title>
-    <button *ngFor="let d of data" (click)="startTasks(d);" ion-button full color="light" icon-end text-wrap class="home-button">
+  <ion-navbar class="home-title">
+    <ion-title *ngIf="!openSearch">
+      Темы для подготовки
+    </ion-title>
+    <ion-buttons *ngIf="!openSearch" end>
+      <button ion-button icon-only (click)="openSearch=true">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-searchbar *ngIf="openSearch" (ionInput)="setSearchString($event.target.value)"></ion-searchbar>
+    <ion-buttons *ngIf="openSearch" end>
+        <button ion-button icon-only (click)="openSearch=false; setSearchString('');">
+          <ion-icon name="close"></ion-icon>
+        </button>
+      </ion-buttons>
+  </ion-navbar>
+  <div class="themes" *ngFor="let d of data">
+    <button *ngIf="searchContainTheme(d.theme)" (click)="startTasks(d);" ion-button full color="light" icon-end text-wrap class="home-button">
       {{d.theme}}
       <ion-icon name="arrow-forward"></ion-icon>
     </button>
+  </div>
 </ion-content>

@@ -5,9 +5,10 @@ import { NavController, NavParams, Slides, Events } from 'ionic-angular';
   selector: 'page-work',
   templateUrl: 'work.html'
 })
-export class WorkPage {
+export class WorkPage { 
   @ViewChild(Slides) slider: Slides;
   
+  testEnded = false;
   dataFiled = false;
   data: {
     theme: string
@@ -42,6 +43,7 @@ export class WorkPage {
       });
       this.currentQuestion = theme.question[0];
       this.dataFiled = true;
+      this.testEnded = false;
       if(this.slider) this.slider.slideTo(0);
     });
   }
@@ -50,10 +52,13 @@ export class WorkPage {
     this.events.publish('chose:task');
   }
 
-  choseQuestion(index){
+  choseQuestion(index, callEnd = true){
     if(this.data.question[index]) {
       this.slider.slideTo(index);
       this.currentQuestion = this.data.question[index];
+    }
+    if(!this.data.question.some(e => e.answer_index === -1) && callEnd){
+      this.testEnded = true;
     }
   }
 
@@ -61,16 +66,21 @@ export class WorkPage {
     if(this.currentQuestion.answer_index==-1){
       this.currentQuestion.answer_index = index;
       this.currentQuestion.answer_index = index;
-      var i = this.currentQuestion.answer_index.toString();
       this.choseQuestion(nextQuestionIndex);
     }
   }
 
+  rightAnswersCount(){
+    return this.data.question.filter(
+        e => e.answer[e.answer_index.toString()].correct
+      ).length;
+  }
+
   swipeEvent(e, currentQuestionIndex) {
-      switch (e.direction){
-        case 2: this.choseQuestion(currentQuestionIndex+1); break;
-        case 4: this.choseQuestion(currentQuestionIndex-1); break;
-        default: break;
-      }
+    switch (e.direction){
+      case 2: this.choseQuestion(currentQuestionIndex+1, false); break;
+      case 4: this.choseQuestion(currentQuestionIndex-1, false); break;
+      default: break;
+    }
   }
 }
