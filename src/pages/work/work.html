@@ -63,7 +63,7 @@
         </ion-col>
       </ion-row>
 
-      <ion-row style="padding-left: 25%; padding-right: 25%;">
+      <ion-row>
         <ion-col>
           <div class="result-markers" *ngFor="let q of data.question; let i = index">
             <div *ngIf="q.answer[q.answer_index.toString()].correct" class="correct"><b>{{i+1}}</b></div>
@@ -83,6 +83,14 @@
       <ion-row>
         <ion-col>
           <button ion-button outline full text-wrap>
+            Посмотреть статистику
+          </button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          <button ion-button outline full text-wrap (click)="choseTask()">
             Закончить тест
           </button>
         </ion-col>

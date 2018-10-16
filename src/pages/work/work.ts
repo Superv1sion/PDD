@@ -50,6 +50,8 @@ export class WorkPage {
 
   choseTask(){
     this.events.publish('chose:task');
+    this.testEnded = false;
+    this.dataFiled = false;
   }
 
   choseQuestion(index, callEnd = true){
