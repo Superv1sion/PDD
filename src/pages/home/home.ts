@@ -39,6 +39,7 @@ export class HomePage {
   startRandomTasks(){
     var theme = {
       theme: "Случайный билет с вопросами",
+      is_random: true,
       question: []
     };
     var history = [];

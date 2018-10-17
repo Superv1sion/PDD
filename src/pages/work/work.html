@@ -52,7 +52,6 @@
 
     </div>
   </div>
-
   
   <div class="end-data" *ngIf="testEnded">
     <ion-grid text-center>
@@ -72,9 +71,9 @@
         </ion-col>
       </ion-row>
 
-      <ion-row>
+      <ion-row *ngIf="haveMistakes()">
         <ion-col>
-          <button ion-button outline full text-wrap>
+          <button ion-button outline full text-wrap (click)="checkMistakes()">
             Работа над ошибками
           </button>
         </ion-col>
