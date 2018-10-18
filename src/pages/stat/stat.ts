@@ -13,7 +13,7 @@ export class StatPage {
   main = {right: 0, all: 0};
   random = {right: 0, all: 0};
   ratio = 0;
-  gain = '0';
+  gain = 0;
   allTimeStat = false;
 
   data: {
@@ -88,15 +88,22 @@ export class StatPage {
 
   switchStat(alltime){
     switch(alltime){
-      case true: {
-        this.allTimeStat = true;
-        this.generateAllTimeStat();
-      } break;
-      case false: {
-        this.allTimeStat = false;
-        this.generateWeekStat();       
-      } break;
+      case true: this.allTimeStat = true; break;
+      case false: this.allTimeStat = false; break;
     }
+    this.clearStat();
+    if(this.data.main && this.data.main.filter((e) => this.sevenDaysFilter(e.day))) this.data.main.filter((e) => this.sevenDaysFilter(e.day)).forEach((e) => {
+      this.main.all += e.all;
+      this.main.right += e.right;
+    });    
+    if(this.data.random && this.data.random.filter((e) => this.sevenDaysFilter(e.day))) this.data.random.filter((e) => this.sevenDaysFilter(e.day)).forEach((e, i) => {
+      this.random.all += e.all;
+      this.random.right += e.right;
+    });
+    var ratio = ((this.main.right + this.random.right)/(this.main.all + this.random.all)*100).toFixed(2);
+    this.ratio = parseFloat(ratio);
+    //TODO: calculate gain
+    this.createGraph(this.buildGraphArrays());
   }
 
   clearStat(){    
@@ -105,58 +112,26 @@ export class StatPage {
     this.random.all = 0;
     this.random.right = 0;
     this.ratio = 0;
-    this.gain = '0';
-  }
-
-  generateAllTimeStat(){
-    this.clearStat();
-    if(this.data.main) this.data.main.forEach((e) => {
-      this.main.all += e.all;
-      this.main.right += e.right;
-    });
-    if(this.data.random) this.data.random.forEach((e, i) => {
-      this.random.all += e.all;
-      this.random.right += e.right;
-    });
-    var ratio = ((this.main.right + this.random.right)/(this.main.all + this.random.all)*100).toFixed(2);
-    this.ratio = parseFloat(ratio);
-    this.gain = '0';
-    this.createGraph(this.buildGraphArrays());
-  }
-
-  generateWeekStat(){
-    this.clearStat();
-    if(this.data.main) this.data.main.filter((e) => this.sevenDaysFilter(e.day)).forEach((e) => {
-      this.main.all += e.all;
-      this.main.right += e.right;
-    });    
-    if(this.data.random) this.data.random.filter((e) => this.sevenDaysFilter(e.day)).forEach((e, i) => {
-      this.random.all += e.all;
-      this.random.right += e.right;
-    });
-    var ratio = ((this.main.right + this.random.right)/(this.main.all + this.random.all)*100).toFixed(2);
-    this.ratio = parseFloat(ratio);
-    this.gain = '0';
-    this.createGraph(this.buildGraphArrays());
+    this.gain = 0;
   }
 
   buildGraphArrays(){
-    var arr = {X: [], Y1: [], Y2: []};
-    this.data.random.forEach((e, i) => {
+    var arr = {X: ['...'], Y1: [0], Y2: [0]};
+    if(this.data.random && this.data.random.filter((e) => this.sevenDaysFilter(e.day))) this.data.random.filter((e) => this.sevenDaysFilter(e.day)).forEach((e, i) => {
       arr.X.push(e.day);
       arr.Y1.push(parseFloat((e.right/e.all*100).toFixed(2)));
       arr.Y2.push(0);
     });
-    this.data.main.forEach((e, i) => {
+    if(this.data.main && this.data.main.filter((e) => this.sevenDaysFilter(e.day))) this.data.main.filter((e) => this.sevenDaysFilter(e.day)).forEach((e, i) => {
       if(arr.X.includes(e.day)){
         var index = arr.X.indexOf(e.day);
         arr.Y2[index] = parseFloat((e.right/e.all*100).toFixed(2));
       }
       else {
-        for(var j=0; j < arr.X.length; j++) if(this.dateDifference(arr.X[j+1], e.day)>0)break;
+        for(var j=0; j < arr.X.length; j++) if(this.dateDifference(arr.X[j], e.day) > 0) break;
         arr.X.splice(j,0,e.day);
         arr.Y1.splice(j,0,0);
-        arr.Y1.splice(j,0,parseFloat((e.right/e.all*100).toFixed(2)));
+        arr.Y2.splice(j,0,parseFloat((e.right/e.all*100).toFixed(2)));
       }
     });
     return arr;
@@ -171,6 +146,7 @@ export class StatPage {
   }
 
   sevenDaysFilter(day){
+    if(this.allTimeStat) return true;
     var now = new Date();
     var d = day.split('.');
     var date = new Date(d[2], d[1], d[0]);
@@ -180,7 +156,6 @@ export class StatPage {
 
   ionViewWillEnter() {
     this.loadStorage().then(() => {
-      console.log(this.data);
       this.switchStat(false);
     });
   }
