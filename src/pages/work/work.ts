@@ -84,7 +84,6 @@ export class WorkPage {
     this.storage.get(key).then((data) => {
       if(data!==null) {
         var storage = JSON.parse(data);
-        console.log(storage);
         var today = storage.filter(e => e.day === this.getCurrentDate());
         if(today.length>0){
           today[0].right += this.rightAnswersCount();
@@ -118,6 +117,10 @@ export class WorkPage {
     return this.data.question.filter(
         e => e.answer[e.answer_index.toString()].correct
       ).length;
+  }
+
+  showStat() {
+    this.events.publish('show:stat');
   }
 
   swipeEvent(e, currentQuestionIndex) {

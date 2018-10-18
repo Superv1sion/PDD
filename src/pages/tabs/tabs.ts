@@ -27,6 +27,9 @@ export class TabsPage {
     events.subscribe('chose:task', () => {
       this.tabRef.select(0);
     });
+    events.subscribe('show:stat', () => {
+      this.tabRef.select(2);
+    });
   }
 
   openMenu(){

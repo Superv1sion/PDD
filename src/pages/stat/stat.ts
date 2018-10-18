@@ -10,45 +10,53 @@ import { Chart } from 'chart.js';
 export class StatPage {
   @ViewChild('stat') stat;
   graph: any;
+  main = {right: 0, all: 0};
+  random = {right: 0, all: 0};
+  ratio = 0;
+  gain = '0';
+  allTimeStat = false;
 
   data: {
-    main: Array<Object>
-    random: Array<Object>
-  };
+    random: Array<any>
+    main: Array<any>
+  }
 
   constructor(public navCtrl: NavController, private storage: Storage) {
     
   }
 
   loadStorage(){
-    return new Promise(() => {
+    return new Promise((resolve, reject) => {
+      var d = {main: [], random: []};
       this.storage.get('random_storage').then((data) => {
         var a = JSON.parse(data);
-        this.data.random = a;
-      });
-      this.storage.get('main_storage').then((data) => {
-        var a = JSON.parse(data);
-        this.data.main = a;
+        d.random = a;
+        this.storage.get('main_storage').then((data) => {
+          var a = JSON.parse(data);
+          d.main = a;
+          this.data = d;
+          resolve();
+        });
       });
     })
   }
 
-  createGraph(X, Y1, Y2){
+  createGraph(arr){
     this.graph = new Chart(this.stat.nativeElement,
       {
         type: 'line',
         data: {
-          labels: X,
+          labels: arr.X,
           datasets: [{
-            label: 'Для случайных билетов',
-            data: Y1,
-            borderColor: 'rgba(54, 162, 235, 1)',
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            label: 'Случайные вопросы',
+            data: arr.Y1,
+            borderColor: 'rgba(34, 139, 34, 1)',
+            backgroundColor: 'rgba(34, 139, 34, 0.2)',
             fill: false,
             lineTension: 0
           },{
-            label: 'Для вопросов по темам',
-            data: Y2,
+            label: 'Вопросы по темам',
+            data: arr.Y2,
             borderColor: 'rgba(255, 206, 86, 1)',
             backgroundColor: 'rgba(255, 206, 86, 0.2)',
             fill: false,
@@ -61,11 +69,7 @@ export class StatPage {
               ticks: {
                 beginAtZero:true
               },
-              display: true,
-              scaleLabel: {
-                display: true,
-                labelString: 'Дата'
-              }
+              display: true
             }],
             yAxes: [{
               ticks: {
@@ -74,7 +78,7 @@ export class StatPage {
               display: true,
               scaleLabel: {
                 display: true,
-                labelString: 'Правильных ответов'
+                labelString: 'Правильных ответов, %'
               }
             }]
           }
@@ -82,10 +86,102 @@ export class StatPage {
     });
   }
 
-  ionViewDidLoad() {
-    //this.loadStorage().then(() => {
-    //  console.log(this.data);
-    //  this.createGraph([],[],[]);
-    //});
+  switchStat(alltime){
+    switch(alltime){
+      case true: {
+        this.allTimeStat = true;
+        this.generateAllTimeStat();
+      } break;
+      case false: {
+        this.allTimeStat = false;
+        this.generateWeekStat();       
+      } break;
+    }
+  }
+
+  clearStat(){    
+    this.main.all = 0;
+    this.main.right = 0;
+    this.random.all = 0;
+    this.random.right = 0;
+    this.ratio = 0;
+    this.gain = '0';
+  }
+
+  generateAllTimeStat(){
+    this.clearStat();
+    if(this.data.main) this.data.main.forEach((e) => {
+      this.main.all += e.all;
+      this.main.right += e.right;
+    });
+    if(this.data.random) this.data.random.forEach((e, i) => {
+      this.random.all += e.all;
+      this.random.right += e.right;
+    });
+    var ratio = ((this.main.right + this.random.right)/(this.main.all + this.random.all)*100).toFixed(2);
+    this.ratio = parseFloat(ratio);
+    this.gain = '0';
+    this.createGraph(this.buildGraphArrays());
+  }
+
+  generateWeekStat(){
+    this.clearStat();
+    if(this.data.main) this.data.main.filter((e) => this.sevenDaysFilter(e.day)).forEach((e) => {
+      this.main.all += e.all;
+      this.main.right += e.right;
+    });    
+    if(this.data.random) this.data.random.filter((e) => this.sevenDaysFilter(e.day)).forEach((e, i) => {
+      this.random.all += e.all;
+      this.random.right += e.right;
+    });
+    var ratio = ((this.main.right + this.random.right)/(this.main.all + this.random.all)*100).toFixed(2);
+    this.ratio = parseFloat(ratio);
+    this.gain = '0';
+    this.createGraph(this.buildGraphArrays());
+  }
+
+  buildGraphArrays(){
+    var arr = {X: [], Y1: [], Y2: []};
+    this.data.random.forEach((e, i) => {
+      arr.X.push(e.day);
+      arr.Y1.push(parseFloat((e.right/e.all*100).toFixed(2)));
+      arr.Y2.push(0);
+    });
+    this.data.main.forEach((e, i) => {
+      if(arr.X.includes(e.day)){
+        var index = arr.X.indexOf(e.day);
+        arr.Y2[index] = parseFloat((e.right/e.all*100).toFixed(2));
+      }
+      else {
+        for(var j=0; j < arr.X.length; j++) if(this.dateDifference(arr.X[j+1], e.day)>0)break;
+        arr.X.splice(j,0,e.day);
+        arr.Y1.splice(j,0,0);
+        arr.Y1.splice(j,0,parseFloat((e.right/e.all*100).toFixed(2)));
+      }
+    });
+    return arr;
+  }
+
+  dateDifference(first, second){
+    var f = first.split('.');
+    var s = second.split('.');
+    var d1 = new Date(f[2], f[1], f[0]);
+    var d2 = new Date(s[2], s[1], s[0]);
+    return d1.valueOf() - d2.valueOf();
+  }
+
+  sevenDaysFilter(day){
+    var now = new Date();
+    var d = day.split('.');
+    var date = new Date(d[2], d[1], d[0]);
+    if(now.valueOf()-date.valueOf() > 24*60*60*1000*7) return false;
+    else return true;
+  }
+
+  ionViewWillEnter() {
+    this.loadStorage().then(() => {
+      console.log(this.data);
+      this.switchStat(false);
+    });
   }
 }

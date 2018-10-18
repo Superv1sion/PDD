@@ -21,11 +21,14 @@
   <div *ngIf="dataFiled && !testEnded">
     <ion-slides slidesPerView="5" centeredSlides="true" #slider>
       <ion-slide *ngFor="let question of data.question">
-          <button *ngIf="question.answer_index==-1; else answered_button" ion-button outline round text-wrap color="dark" (click)="choseQuestion(question.index);">{{question.index+1}}</button>
+          <button *ngIf="question.answer_index==-1 && currentQuestion.index!=question.index; else answered_button" ion-button outline round text-wrap color="dark" (click)="choseQuestion(question.index);">{{question.index+1}}</button>
           <ng-template #answered_button>
-              <button *ngIf="question.answer[question.answer_index].correct" ion-button round text-wrap color="secondary" (click)="choseQuestion(question.index);">{{question.index+1}}</button>
-              <button *ngIf="!question.answer[question.answer_index].correct" ion-button round text-wrap color="danger" (click)="choseQuestion(question.index);">{{question.index+1}}</button>
-          </ng-template>
+              <button *ngIf="question.answer_index==-1; else answer" ion-button round text-wrap (click)="choseQuestion(question.index);">{{question.index+1}}</button>
+              <ng-template #answer>
+                <button *ngIf="question.answer[question.answer_index].correct" ion-button round text-wrap color="secondary" (click)="choseQuestion(question.index);">{{question.index+1}}</button>
+                <button *ngIf="!question.answer[question.answer_index].correct" ion-button round text-wrap color="danger" (click)="choseQuestion(question.index);">{{question.index+1}}</button>    
+              </ng-template>
+            </ng-template>
         </ion-slide>
     </ion-slides>
 
@@ -81,7 +84,7 @@
 
       <ion-row>
         <ion-col>
-          <button ion-button outline full text-wrap>
+          <button ion-button outline full text-wrap (click)="showStat()">
             Посмотреть статистику
           </button>
         </ion-col>

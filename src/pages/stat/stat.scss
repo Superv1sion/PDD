@@ -2,7 +2,14 @@ page-stat {
     .scroll-content {
         background-color: map-get($colors, light);
     }
-    ion-card-header {
-        font-weight: bold;
+    .data {
+        text-align: left;
+        margin-bottom: 10px;
+    }
+    .switcher {
+        .button-md {
+            width: 48%;
+            margin-bottom: 10px;
+        }
     }
 }

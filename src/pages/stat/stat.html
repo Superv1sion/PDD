@@ -1,18 +1,39 @@
 <ion-header>
-  <!--ion-navbar>
-    <ion-title>Статистика</ion-title>   https://www.chartjs.org/
-  </ion-navbar-->
+  <ion-navbar>
+    <ion-title>Статистика</ion-title>
+  </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding text-center>
+  <div class="switcher">
+    <button *ngIf="!allTimeStat" ion-button text-wrap (click)="switchStat(false)">За неделю</button>
+    <button *ngIf="allTimeStat" ion-button outline text-wrap (click)="switchStat(false)">За неделю</button>
+    <button *ngIf="allTimeStat" ion-button text-wrap (click)="switchStat(true)">За все время</button>
+    <button *ngIf="!allTimeStat" ion-button outline text-wrap (click)="switchStat(true)">За все время</button>
+  </div>
 
-  <ion-card>
-    <ion-card-header>
-      Статистика
-    </ion-card-header>
-    <ion-card-content>
-      <canvas #stat></canvas>
-    </ion-card-content>
-  </ion-card>
-
+  <div class="data">
+    <ion-grid>
+      <ion-row>
+        <ion-col><b>Вопросы по темам:</b></ion-col>
+        <ion-col>{{main.right}} / {{main.all}}</ion-col>
+      </ion-row>
+      
+      <ion-row>
+        <ion-col><b>Случайные вопросы:</b></ion-col>
+        <ion-col>{{random.right}} / {{random.all}}</ion-col>
+      </ion-row>
+        
+      <ion-row>
+        <ion-col><b>Правильных ответов:</b></ion-col>
+        <ion-col>{{ratio}} <b>%</b></ion-col>
+      </ion-row>
+      
+      <ion-row>
+        <ion-col><b>Прирост правильных ответов:</b></ion-col>
+        <ion-col>{{gain}} <b>%</b></ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <canvas #stat></canvas>
 </ion-content>
