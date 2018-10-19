@@ -16,8 +16,8 @@
       </ion-row>
     </ion-grid>
   </div>
-  
-  
+
+
   <div *ngIf="dataFiled && !testEnded">
     <ion-slides slidesPerView="5" centeredSlides="true" #slider>
       <ion-slide *ngFor="let question of data.question">
@@ -26,14 +26,14 @@
               <button *ngIf="question.answer_index==-1; else answer" ion-button round text-wrap (click)="choseQuestion(question.index);">{{question.index+1}}</button>
               <ng-template #answer>
                 <button *ngIf="question.answer[question.answer_index].correct" ion-button round text-wrap color="secondary" (click)="choseQuestion(question.index);">{{question.index+1}}</button>
-                <button *ngIf="!question.answer[question.answer_index].correct" ion-button round text-wrap color="danger" (click)="choseQuestion(question.index);">{{question.index+1}}</button>    
+                <button *ngIf="!question.answer[question.answer_index].correct" ion-button round text-wrap color="danger" (click)="choseQuestion(question.index);">{{question.index+1}}</button>
               </ng-template>
             </ng-template>
         </ion-slide>
     </ion-slides>
 
     <div class="question-block" (swipe)="swipeEvent($event, currentQuestion.index)">
-      
+
       <ion-row class="question-text">
         {{currentQuestion.text}}
       </ion-row>
@@ -55,7 +55,7 @@
 
     </div>
   </div>
-  
+
   <div class="end-data" *ngIf="testEnded">
     <ion-grid text-center>
 
@@ -68,8 +68,8 @@
       <ion-row>
         <ion-col>
           <div class="result-markers" *ngFor="let q of data.question; let i = index">
-            <div *ngIf="q.answer[q.answer_index.toString()].correct" class="correct"><b>{{i+1}}</b></div>
-            <div *ngIf="!q.answer[q.answer_index.toString()].correct" class="wrong"><b>{{i+1}}</b></div>
+            <div *ngIf="q.answer[q.answer_index.toString()].correct" class="correct">{{i+1}}</div>
+            <div *ngIf="!q.answer[q.answer_index.toString()].correct" class="wrong">{{i+1}}</div>
           </div>
         </ion-col>
       </ion-row>
@@ -97,7 +97,7 @@
           </button>
         </ion-col>
       </ion-row>
-      
+
     </ion-grid>
   </div>
 </ion-content>

@@ -6,9 +6,9 @@ import { Storage } from '@ionic/storage';
   selector: 'page-work',
   templateUrl: 'work.html'
 })
-export class WorkPage { 
+export class WorkPage {
   @ViewChild(Slides) slider: Slides;
-  
+
   testEnded = false;
   dataFiled = false;
   isRandom = false;
@@ -65,7 +65,6 @@ export class WorkPage {
     }
     if(!this.data.question.some(e => e.answer_index === -1) && callEnd){
       this.testEnded = true;
-      this.storeData();
     }
   }
 
@@ -77,35 +76,43 @@ export class WorkPage {
     return dd + "." + mm + "." + yyyy;
   }
 
-  storeData(){
-    var key = 'main_storage';
+  storeData(correct){
+    var key;
+    var rightSum;
     if (this.isRandom) key = 'random_storage';
-    
+    else key = 'main_storage';
+    if (correct) rightSum = 1;
+    else rightSum = 0;
+
     this.storage.get(key).then((data) => {
       if(data!==null) {
         var storage = JSON.parse(data);
         var today = storage.filter(e => e.day === this.getCurrentDate());
         if(today.length>0){
-          today[0].right += this.rightAnswersCount();
-          today[0].all += this.data.question.length;
+          today[0].right += rightSum;
+          today[0].all += 1;
         }
-        else storage.push({"day": this.getCurrentDate(), "right": this.rightAnswersCount(), "all": this.data.question.length});
+        else storage.push({"day": this.getCurrentDate(), "right": rightSum, "all": 1});
         this.storage.set(key, JSON.stringify(storage));
       }
-      else this.storage.set(key, '[{"day": "'+this.getCurrentDate()+'", "right": '+this.rightAnswersCount()+', "all": '+this.data.question.length+'}]');
+      else this.storage.set(key, '[{"day": "'+this.getCurrentDate()+'", "right": '+rightSum+', "all": 1}]');
     });
+    console.log('stored');
   }
 
   answerQuestion(index, nextQuestionIndex){
     if(this.currentQuestion.answer_index==-1){
       this.currentQuestion.answer_index = index;
       this.currentQuestion.answer_index = index;
+      if(this.currentQuestion.answer[this.currentQuestion.answer_index.toString()].correct) this.storeData(true);
+      else this.storeData(false);
       this.choseQuestion(nextQuestionIndex, true);
     }
   }
 
   checkMistakes(){
     console.log('show mistakes and theory');
+    //todo: работа над ошибками
   }
 
   haveMistakes(){

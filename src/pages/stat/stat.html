@@ -18,22 +18,38 @@
         <ion-col><b>Вопросы по темам:</b></ion-col>
         <ion-col>{{main.right}} / {{main.all}}</ion-col>
       </ion-row>
-      
+
       <ion-row>
         <ion-col><b>Случайные вопросы:</b></ion-col>
         <ion-col>{{random.right}} / {{random.all}}</ion-col>
       </ion-row>
-        
+
       <ion-row>
         <ion-col><b>Правильных ответов:</b></ion-col>
-        <ion-col>{{ratio}} <b>%</b></ion-col>
+        <ion-col>{{ratio}} %</ion-col>
       </ion-row>
-      
+
       <ion-row>
         <ion-col><b>Прирост правильных ответов:</b></ion-col>
-        <ion-col>{{gain}} <b>%</b></ion-col>
+        <ion-col>
+          <b *ngIf="gain>0" style="color: limegreen">⇗</b><b *ngIf="gain<0" style="color: red">⇘</b> {{gain}} %
+        </ion-col>
       </ion-row>
+
+
+      <div class="switcher" text-center>
+        <button *ngIf="!isPie" ion-button icon-only (click)="isPie=false; switchStat(allTimeStat)"><ion-icon name="pulse"></ion-icon></button>
+        <button *ngIf="isPie" ion-button outline icon-only (click)="isPie=false; switchStat(allTimeStat)"><ion-icon name="pulse"></ion-icon></button>
+        <button *ngIf="isPie" ion-button icon-only (click)="isPie=true; switchStat(allTimeStat)"><ion-icon name="pie"></ion-icon></button>
+        <button *ngIf="!isPie" ion-button outline icon-only (click)="isPie=true; switchStat(allTimeStat)"><ion-icon name="pie"></ion-icon></button>
+      </div>
+
+      <ion-row>
+        <ion-col id="graph-container">
+          <canvas class="graph" id="graph" #stat></canvas>
+        </ion-col>
+      </ion-row>
+
     </ion-grid>
   </div>
-  <canvas #stat></canvas>
 </ion-content>
