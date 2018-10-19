@@ -97,7 +97,6 @@ export class WorkPage {
       }
       else this.storage.set(key, '[{"day": "'+this.getCurrentDate()+'", "right": '+rightSum+', "all": 1}]');
     });
-    console.log('stored');
   }
 
   answerQuestion(index, nextQuestionIndex){
