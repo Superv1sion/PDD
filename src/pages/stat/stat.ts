@@ -2,7 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Chart } from 'chart.js';
-import * as $ from 'jquery';
 
 @Component({
   selector: 'page-stat',

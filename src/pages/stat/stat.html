@@ -16,22 +16,22 @@
     <ion-grid>
       <ion-row>
         <ion-col><b>Вопросы по темам:</b></ion-col>
-        <ion-col>{{main.right}} / {{main.all}}</ion-col>
+        <ion-col text-center>{{main.right}} / {{main.all}}</ion-col>
       </ion-row>
 
       <ion-row>
         <ion-col><b>Случайные вопросы:</b></ion-col>
-        <ion-col>{{random.right}} / {{random.all}}</ion-col>
+        <ion-col text-center>{{random.right}} / {{random.all}}</ion-col>
       </ion-row>
 
       <ion-row>
         <ion-col><b>Правильных ответов:</b></ion-col>
-        <ion-col>{{ratio}} %</ion-col>
+        <ion-col text-center>{{ratio}} %</ion-col>
       </ion-row>
 
       <ion-row>
         <ion-col><b>Прирост правильных ответов:</b></ion-col>
-        <ion-col>
+        <ion-col text-center>
           <b *ngIf="gain>0" style="color: limegreen">⇗</b><b *ngIf="gain<0" style="color: red">⇘</b> {{gain}} %
         </ion-col>
       </ion-row>
