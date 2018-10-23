@@ -3,7 +3,6 @@ var fs = require('fs-extra')
 // we will add config later here, right now the translation files are not being copied even though
 // they are in assets.
 var dependencies = [
-  ['node_modules/font-awesome/fonts/', 'www/fonts'], 
   ['src/assets/data', 'www/assets']
 ];
 

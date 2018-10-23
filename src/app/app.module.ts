@@ -14,7 +14,6 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { File } from '@ionic-native/file';
-import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 @NgModule({
   declarations: [
@@ -42,7 +41,6 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
   providers: [
     StatusBar,
     SplashScreen,
-    InAppBrowser,
     File,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
