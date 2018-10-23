@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, Slides, Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'page-work',
@@ -12,34 +13,18 @@ export class WorkPage {
   testEnded = false;
   dataFiled = false;
   isRandom = false;
+  isDebug = false;
+  localization: string;
+  loc: any;
+  data_index: any;
+  data: any;
+  currentQuestion: any;
 
-  data: {
-    theme: string
-    question: Array<{
-      text: string
-      image: string
-      index: Number
-      answer_index: Number
-      answer: Array<{
-        text: string
-        correct: boolean
-      }>
-    }>
-  };
-  currentQuestion: {
-    text: string
-    image: string
-    index: Number
-    answer_index: Number
-    answer: Array<{
-      text: string
-      correct: boolean
-    }>
-  };
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, public events: Events, private storage: Storage) {
-    events.subscribe('theme:start:solve', (theme) => {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public events: Events, private storage: Storage, public http: HttpClient) {
+    this.loc =[];
+    events.subscribe('theme:start:solve', (theme, index) => {
       this.data = theme;
+      this.data_index = index;
       this.data.question.forEach((element, index) => {
         element.answer_index = -1;
         element.index = index;
@@ -52,10 +37,46 @@ export class WorkPage {
     });
   }
 
+  ionViewWillEnter(){
+    this.storage.get('localization').then(data => {
+      if(data!==null) this.localization = data;
+      else this.localization = "ru";
+      this.Translate();
+    })
+  }
+
+  Translate(){
+    this.storage.set('localization', this.localization);
+    if(this.data) this.http.get<any[]>('assets/data/data-'+this.localization+'.json').subscribe(data => {
+      if(!this.isRandom) {
+        this.data.theme = data[this.data_index].theme;
+        this.data.question.forEach((e, i) =>{
+          e.text = data[this.data_index].question[i].text;
+          e.answer.forEach((q, j) => {
+            q.text = data[this.data_index].question[i].answer[j].text;
+          });
+        });
+      }
+      else {
+        this.data_index.forEach((e, i) => {
+          this.data.question[i].text = data[e.first].question[e.second].text;
+          this.data.question[i].answer.forEach((q, j) => {
+            q.text = data[e.first].question[e.second].answer[j].text;
+          });
+        });
+      }
+    });
+    this.http.get<any>('assets/data/localization-'+this.localization+'.json').subscribe(data => {
+      this.loc = data.work;
+      if(this.isRandom && this.data) this.data.theme = data.home.random;
+    });
+  }
+
   choseTask(){
-    this.events.publish('chose:task');
     this.testEnded = false;
     this.dataFiled = false;
+    delete this.data;
+    this.events.publish('chose:task');
   }
 
   choseQuestion(index, callEnd = false){
@@ -110,8 +131,19 @@ export class WorkPage {
   }
 
   checkMistakes(){
-    console.log('show mistakes and theory');
-    //todo: работа над ошибками
+    var newData = this.data;
+    newData.question = newData.question.filter(e => !e.answer[e.answer_index].correct);
+    newData.question.forEach((element, index) => {
+      element.answer_index = -1;
+      element.index = index;
+    });
+    delete this.data;
+    this.data = newData;
+    this.currentQuestion = this.data.question[0];
+    if(this.slider) this.slider.slideTo(0);
+    this.isDebug = true;
+    this.testEnded = false;
+    this.dataFiled = true;
   }
 
   haveMistakes(){
@@ -127,6 +159,13 @@ export class WorkPage {
 
   showStat() {
     this.events.publish('show:stat');
+  }
+
+  nextTask(){
+    this.testEnded = false;
+    this.dataFiled = false;
+    delete this.data;
+    this.events.publish('next:task');
   }
 
   swipeEvent(e, currentQuestionIndex) {

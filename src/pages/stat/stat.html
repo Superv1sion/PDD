@@ -1,36 +1,42 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Статистика</ion-title>
+    <ion-title><b>{{loc.header}}</b></ion-title>
+    <ion-buttons end>
+        <ion-select [(ngModel)]="localization" interface="popover" (ionChange)="Translate();">
+          <ion-option value="ru">Русский</ion-option>
+          <ion-option value="ua">Українська</ion-option>
+        </ion-select>
+      </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding text-center>
   <div class="switcher">
-    <button *ngIf="!allTimeStat" ion-button text-wrap (click)="switchStat(false)">За неделю</button>
-    <button *ngIf="allTimeStat" ion-button outline text-wrap (click)="switchStat(false)">За неделю</button>
-    <button *ngIf="allTimeStat" ion-button text-wrap (click)="switchStat(true)">За все время</button>
-    <button *ngIf="!allTimeStat" ion-button outline text-wrap (click)="switchStat(true)">За все время</button>
+    <button *ngIf="!allTimeStat" ion-button text-wrap (click)="switchStat(false)">{{loc.week}}</button>
+    <button *ngIf="allTimeStat" ion-button outline text-wrap (click)="switchStat(false)">{{loc.week}}</button>
+    <button *ngIf="allTimeStat" ion-button text-wrap (click)="switchStat(true)">{{loc.all_time}}</button>
+    <button *ngIf="!allTimeStat" ion-button outline text-wrap (click)="switchStat(true)">{{loc.all_time}}</button>
   </div>
 
   <div class="data">
     <ion-grid>
       <ion-row>
-        <ion-col><b>Вопросы по темам:</b></ion-col>
-        <ion-col text-center>{{main.right}} / {{main.all}}</ion-col>
+        <ion-col><b>{{loc.theme_questions}}:</b></ion-col>
+        <ion-col text-center>{{main.right}} / {{main.all}} ({{main.percent}} %)</ion-col>
       </ion-row>
 
       <ion-row>
-        <ion-col><b>Случайные вопросы:</b></ion-col>
-        <ion-col text-center>{{random.right}} / {{random.all}}</ion-col>
+        <ion-col><b>{{loc.random_questions}}:</b></ion-col>
+        <ion-col text-center>{{random.right}} / {{random.all}} ({{random.percent}} %)</ion-col>
       </ion-row>
 
       <ion-row>
-        <ion-col><b>Правильных ответов:</b></ion-col>
+        <ion-col><b>{{loc.right_answers}}:</b></ion-col>
         <ion-col text-center>{{ratio}} %</ion-col>
       </ion-row>
 
       <ion-row>
-        <ion-col><b>Прирост правильных ответов:</b></ion-col>
+        <ion-col><b>{{loc.gain}}:</b></ion-col>
         <ion-col text-center>
           <b *ngIf="gain>0" style="color: limegreen">⇗</b><b *ngIf="gain<0" style="color: red">⇘</b> {{gain}} %
         </ion-col>

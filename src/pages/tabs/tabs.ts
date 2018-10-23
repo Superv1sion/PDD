@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { MenuController, Events } from 'ionic-angular';
+import { Events } from 'ionic-angular';
 import { Tabs } from 'ionic-angular';
 
 import { WorkPage } from '../work/work';
@@ -17,11 +17,10 @@ export class TabsPage {
   tab2Root = WorkPage;
   tab3Root = StatPage;
 
-  constructor(public menuCtrl: MenuController, public events: Events) {
-    this.menuCtrl.enable(true);
-    events.subscribe('theme:chosen', (theme) => {
+  constructor(public events: Events) {
+    events.subscribe('theme:chosen', (theme, index) => {
       this.tabRef.select(1).then(function(){
-        events.publish('theme:start:solve', theme);
+        events.publish('theme:start:solve', theme, index);
       });
     });
     events.subscribe('chose:task', () => {
@@ -30,10 +29,10 @@ export class TabsPage {
     events.subscribe('show:stat', () => {
       this.tabRef.select(2);
     });
-  }
-
-  openMenu(){
-    this.menuCtrl.open();
+    events.subscribe('next:task', () => {
+      this.tabRef.select(1);
+      events.publish('next:task:generate');
+    });
   }
 
 

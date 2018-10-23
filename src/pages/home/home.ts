@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, Events } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-home',
@@ -10,16 +11,34 @@ export class HomePage {
 
   searchString = '';
   openSearch = false;
-  data = [];
+  data: any[];
+  loc: any;
+  localization: string;
 
-  constructor(public navCtrl: NavController, public http: HttpClient, public events: Events) {
-    this.loadThemes();
+  constructor(public navCtrl: NavController, public http: HttpClient, public events: Events, private storage: Storage) {
+    this.loc = [];
+    this.data = [];
+    this.events.subscribe('next:task:generate', ()=>{
+      this.startRandomTasks();
+    });
   }
 
-  loadThemes(){
-    this.http.get<any[]>('assets/data/data-rus.json').subscribe(data => {
+  ionViewWillEnter(){
+    this.storage.get('localization').then(data => {
+      if(data!==null) this.localization = data;
+      else this.localization = "ru";
+      this.Translate();
+    });
+  }
+
+  Translate(){
+    this.http.get<any[]>('assets/data/data-'+this.localization+'.json').subscribe(data => {
       this.data = data;
     });
+    this.http.get<any>('assets/data/localization-'+this.localization+'.json').subscribe(data => {
+      this.loc = data.home;
+    });
+    this.storage.set('localization', this.localization);
   }
 
   setSearchString(val){
@@ -32,13 +51,13 @@ export class HomePage {
     else return false;
   }
 
-  startTasks(theme){
-    this.events.publish('theme:chosen', theme);
+  startTasks(theme, index){
+    this.events.publish('theme:chosen', theme, index);
   }
 
   startRandomTasks(){
     var theme = {
-      theme: "Случайный билет с вопросами",
+      theme: this.loc.random,
       is_random: true,
       question: []
     };
@@ -52,6 +71,6 @@ export class HomePage {
         theme.question.push(this.data[first].question[second]);
       }
     }
-    this.events.publish('theme:chosen', theme);
+    this.events.publish('theme:chosen', theme, history);
   }
 }

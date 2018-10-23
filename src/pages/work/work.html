@@ -1,6 +1,13 @@
 <ion-header>
-  <ion-navbar *ngIf="dataFiled">
-    <ion-title>{{data.theme}}</ion-title>
+  <ion-navbar>
+    <ion-title *ngIf="dataFiled"><b>{{data.theme}}</b></ion-title>
+    <ion-title *ngIf="!dataFiled"><b>{{loc.header}}</b></ion-title>
+    <ion-buttons end>
+        <ion-select [(ngModel)]="localization" interface="popover" (ionChange)="Translate();">
+          <ion-option value="ru">Русский</ion-option>
+          <ion-option value="ua">Українська</ion-option>
+        </ion-select>
+      </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -10,7 +17,7 @@
       <ion-row>
         <ion-col text-center>
           <button ion-button outline text-wrap large round (click)="choseTask();">
-            Выберите билет или тему, для начала тестирования
+            {{loc.button}}
           </button>
         </ion-col>
       </ion-row>
@@ -61,7 +68,7 @@
 
       <ion-row>
         <ion-col>
-          <b>Правильных ответов: {{rightAnswersCount()}} из {{data.question.length}}</b>
+          <b>{{loc.right_answers}}: {{rightAnswersCount()}} / {{data.question.length}}</b>
         </ion-col>
       </ion-row>
 
@@ -74,26 +81,34 @@
         </ion-col>
       </ion-row>
 
-      <ion-row *ngIf="haveMistakes()">
+      <ion-row *ngIf="haveMistakes() && !isDebug">
         <ion-col>
-          <button ion-button outline full text-wrap (click)="checkMistakes()">
-            Работа над ошибками
+          <button ion-button outline full text-wrap (click)="checkMistakes();">
+              {{loc.work_on_the_bugs}}
           </button>
         </ion-col>
       </ion-row>
 
       <ion-row>
         <ion-col>
-          <button ion-button outline full text-wrap (click)="showStat()">
-            Посмотреть статистику
+          <button ion-button outline full text-wrap (click)="showStat();">
+              {{loc.show_stat}}
+          </button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="isRandom">
+        <ion-col>
+          <button ion-button outline full text-wrap (click)="nextTask();">
+              {{loc.next}}
           </button>
         </ion-col>
       </ion-row>
 
       <ion-row>
         <ion-col>
-          <button ion-button outline full text-wrap (click)="choseTask()">
-            Закончить тест
+          <button ion-button outline full text-wrap (click)="choseTask();">
+              {{loc.end_test}}
           </button>
         </ion-col>
       </ion-row>

@@ -1,20 +1,26 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Тестирование</ion-title>
+    <ion-title><b>{{loc.header}}</b></ion-title>
+    <ion-buttons end>
+      <ion-select [(ngModel)]="localization" interface="popover" (ionChange)="Translate();">
+        <ion-option value="ru">Русский</ion-option>
+        <ion-option value="ua">Українська</ion-option>
+      </ion-select>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content text-center class="home-constent">
   <div class="themes">
     <button (click)="startRandomTasks();" ion-button full color="light" icon-end text-wrap class="home-button">
-      Случайный билет с вопросами
+      {{loc.random}}
       <ion-icon name="arrow-forward"></ion-icon>
     </button>
-  </div>  
+  </div>
 
   <ion-navbar class="home-title">
     <ion-title *ngIf="!openSearch">
-      Темы для подготовки
+      <b>{{loc.themes}}</b>
     </ion-title>
     <ion-buttons *ngIf="!openSearch" end>
       <button ion-button icon-only (click)="openSearch=true">
@@ -28,8 +34,8 @@
         </button>
       </ion-buttons>
   </ion-navbar>
-  <div class="themes" *ngFor="let d of data">
-    <button *ngIf="searchContainTheme(d.theme)" (click)="startTasks(d);" ion-button full color="light" icon-end text-wrap class="home-button">
+  <div class="themes" *ngFor="let d of data; let i = index">
+    <button *ngIf="searchContainTheme(d.theme)" (click)="startTasks(d,i);" ion-button full color="light" icon-end text-wrap class="home-button">
       {{d.theme}}
       <ion-icon name="arrow-forward"></ion-icon>
     </button>

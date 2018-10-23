@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { HttpClient } from '@angular/common/http';
 import { Chart } from 'chart.js';
 
 @Component({
@@ -10,20 +11,30 @@ import { Chart } from 'chart.js';
 export class StatPage {
   @ViewChild('stat') stat;
   graph: any;
-  main = {right: 0, all: 0};
-  random = {right: 0, all: 0};
+  main = {right: 0, all: 0, percent: 0};
+  random = {right: 0, all: 0, percent: 0};
   ratio = 0;
   gain = 0;
   allTimeStat = false;
   isPie = false;
+  localization: string;
+  loc: any;
 
   data: {
     random: Array<any>
     main: Array<any>
   }
 
-  constructor(public navCtrl: NavController, private storage: Storage) {
+  constructor(public navCtrl: NavController, private storage: Storage, public http: HttpClient) {
+    this.loc = [];
+  }
 
+  Translate(){
+    this.storage.set('localization', this.localization);
+    this.http.get<any>('assets/data/localization-'+this.localization+'.json').subscribe(data => {
+      this.loc = data.stat;
+      if(this.data) this.switchStat(this.allTimeStat);
+    });
   }
 
   loadStorage(){
@@ -46,11 +57,11 @@ export class StatPage {
     if(this.graph!=null) this.graph.destroy();
     this.graph = new Chart(this.stat.nativeElement,
       {
-        type: 'bar',
+        type: 'line',
         data: {
           labels: arr.X,
           datasets: [{
-            label: 'В среднем',
+            label: this.loc.right_answers,
             data: arr.Y3,
             borderColor: 'rgba(30, 144, 255, 1)',
             backgroundColor: 'rgba(30, 144, 255, 0.8)',
@@ -58,25 +69,6 @@ export class StatPage {
 						pointRadius: 3,
 						pointHoverRadius: 6,
             cubicInterpolationMode: 'monotone',
-            type: 'line'
-          },{
-            label: 'Случайные вопросы',
-            data: arr.Y1,
-            borderColor: 'rgba(50, 160, 50, 1)',
-            backgroundColor: 'rgba(50, 160, 50, 0.8)',
-            fill: false,
-						pointRadius: 3,
-						pointHoverRadius: 6,
-            cubicInterpolationMode: 'monotone'
-          },{
-            label: 'Вопросы по темам',
-            data: arr.Y2,
-            borderColor: 'rgba(255, 206, 86, 1)',
-            backgroundColor: 'rgba(255, 206, 86, 0.8)',
-            fill: false,
-						pointRadius: 3,
-						pointHoverRadius: 6,
-            cubicInterpolationMode: 'monotone'
           }]
         },
         options: {
@@ -87,9 +79,6 @@ export class StatPage {
                 beginAtZero:true
               },
               display: true,
-              gridLines: {
-                color: "rgba(0, 0, 0, 0.7)"
-              }
             }],
             yAxes: [{
               ticks: {
@@ -98,7 +87,7 @@ export class StatPage {
               display: true,
               scaleLabel: {
                 display: true,
-                labelString: 'Правильных ответов, %'
+                labelString: '%'
               }
             }]
           },
@@ -120,15 +109,15 @@ export class StatPage {
       {
         type: 'pie',
         data: {
-          labels: ['Правильных ответов', 'Неправильных ответов', 'Всего ответов'],
+          labels: [this.loc.right_answers, this.loc.wrong_answers, this.loc.total_answers],
           datasets: [{
             data: [totalRight, totalWrong, null],
-            backgroundColor: ['rgba(50, 160, 50, 1)', 'rgba(255, 61, 103, 1)', 'rgba(255, 205, 86, 1)'],
-            borderColor: ['rgba(50, 160, 50, 0.8)', 'rgba(255, 61, 103, 0.8)', 'rgba(255, 205, 86, 0)'],
+            backgroundColor: ['rgba(50, 160, 50, 1)', 'rgba(255, 61, 103, 1)', 'rgba(30, 144, 255, 1)'],
+            borderColor: ['rgba(50, 160, 50, 1)', 'rgba(255, 61, 103, 1)', 'rgba(30, 144, 255, 0)'],
           },{
             data: [null, null, totalRight + totalWrong],
-            backgroundColor: ['rgba(50, 160, 50, 1)', 'rgba(255, 61, 103, 1)', 'rgba(255, 205, 86, 1)'],
-            borderColor: ['rgba(50, 160, 50, 0.8)', 'rgba(255, 61, 103, 0.8)', 'rgba(255, 205, 86, 0)'],
+            backgroundColor: ['rgba(50, 160, 50, 1)', 'rgba(255, 61, 103, 1)', 'rgba(30, 144, 255, 1)'],
+            borderColor: ['rgba(50, 160, 50, 0)', 'rgba(255, 61, 103, 0)', 'rgba(30, 144, 255, 1)'],
           }]
         },
         options: {
@@ -146,12 +135,13 @@ export class StatPage {
       this.main.all += e.all;
       this.main.right += e.right;
     });
+    this.main.percent = parseFloat((this.main.right/this.main.all*100).toFixed(2));
     if(this.data.random && this.data.random.filter((e) => this.sevenDaysFilter(e.day))) this.data.random.filter((e) => this.sevenDaysFilter(e.day)).forEach((e, i) => {
       this.random.all += e.all;
       this.random.right += e.right;
     });
-    var ratio = ((this.main.right + this.random.right)/(this.main.all + this.random.all)*100).toFixed(2);
-    this.ratio = parseFloat(ratio);
+    this.random.percent = parseFloat((this.random.right/this.random.all*100).toFixed(2));
+    this.ratio = parseFloat(((this.main.right + this.random.right)/(this.main.all + this.random.all)*100).toFixed(2));
     var arrays = this.buildGraphArrays();
 
     if(!this.isPie) this.createGraph(arrays);
@@ -220,6 +210,11 @@ export class StatPage {
   }
 
   ionViewWillEnter() {
+    this.storage.get('localization').then(data => {
+      if(data!==null) this.localization = data;
+      else this.localization = "ru";
+      this.Translate();
+    })
     this.loadStorage().then(() => {
       this.switchStat(false);
     });

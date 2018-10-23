@@ -1,8 +1,8 @@
 page-home {
-    .toolbar-background {
-        background-color: lightgrey;
-    }
-    ion-content{
+    ion-content {
+      .toolbar-background {
+          background-color: map-get($colors, light);
+      }
         .home-title {
             text-align: left;
             padding: 20px;
@@ -16,7 +16,7 @@ page-home {
             }
         }
         .themes{
-            .button-md {
+            button {
                 height: 90px;
                 border-top: 1px solid grey;
                 border-bottom: 1px solid grey;

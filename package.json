@@ -1,8 +1,8 @@
 {
   "name": "PDD",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "http://ionicframework.com/",
+  "author": "LiquidBrain",
+  "homepage": "https://liquidbrain.com.ua/",
   "private": true,
   "scripts": {
     "start": "ionic-app-scripts serve",
@@ -23,9 +23,6 @@
     "@angular/http": "5.2.11",
     "@angular/platform-browser": "5.2.11",
     "@angular/platform-browser-dynamic": "5.2.11",
-    "@fortawesome/angular-fontawesome": "^0.2.0",
-    "@fortawesome/fontawesome-svg-core": "^1.2.4",
-    "@fortawesome/free-solid-svg-icons": "^5.3.1",
     "@ionic-native/core": "~4.15.0",
     "@ionic-native/file": "~4.15.0",
     "@ionic-native/splash-screen": "~4.15.0",
@@ -34,6 +31,7 @@
     "chart.js": "2.7.3",
     "chartjs-color": "2.2.0",
     "chartjs-color-string": "0.5.0",
+    "cordova": "8.1.2",
     "cordova-android": "~7.1.1",
     "cordova-browser": "~5.0.4",
     "cordova-ios": "~4.5.5",
