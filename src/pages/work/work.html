@@ -26,7 +26,7 @@
 
 
   <div *ngIf="dataFiled && !testEnded">
-    <ion-slides slidesPerView="5" centeredSlides="true" #slider>
+    <ion-slides slidesPerView="7" centeredSlides="true" #slider>
       <ion-slide *ngFor="let question of data.question">
           <button *ngIf="question.answer_index==-1 && currentQuestion.index!=question.index; else answered_button" ion-button outline round text-wrap color="dark" (click)="choseQuestion(question.index);">{{question.index+1}}</button>
           <ng-template #answered_button>
@@ -60,6 +60,18 @@
         </ion-col>
       </ion-row>
 
+      <ion-row class="spoiler" *ngIf="currentQuestion.pdd || currentQuestion.help">
+        <input type="checkbox" id="spoilerid_1">
+        <label for="spoilerid_1">{{loc.theory}}</label>
+        <div class="spoiler_body">
+          <div *ngIf="currentQuestion.pdd">
+            <a href="{{currentQuestion.pdd.url}}">{{currentQuestion.pdd.text}}</a>
+          </div>
+          <div *ngIf="currentQuestion.help">
+            {{currentQuestion.help}}
+          </div>
+        </div>
+      </ion-row>
     </div>
   </div>
 

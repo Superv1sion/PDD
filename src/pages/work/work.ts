@@ -31,6 +31,7 @@ export class WorkPage {
       });
       this.currentQuestion = this.data.question[0];
       if(theme.is_random) this.isRandom = true;
+      else this.isRandom = false;
       this.dataFiled = true;
       this.testEnded = false;
       if(this.slider) this.slider.slideTo(0);
@@ -52,17 +53,15 @@ export class WorkPage {
         this.data.theme = data[this.data_index].theme;
         this.data.question.forEach((e, i) =>{
           e.text = data[this.data_index].question[i].text;
-          e.answer.forEach((q, j) => {
-            q.text = data[this.data_index].question[i].answer[j].text;
-          });
+          e.pdd = data[this.data_index].question[i].pdd;
+          e.help = data[this.data_index].question[i].help;
+          e.answer.forEach((q, j) => q.text = data[this.data_index].question[i].answer[j].text);
         });
       }
       else {
         this.data_index.forEach((e, i) => {
           this.data.question[i].text = data[e.first].question[e.second].text;
-          this.data.question[i].answer.forEach((q, j) => {
-            q.text = data[e.first].question[e.second].answer[j].text;
-          });
+          this.data.question[i].answer.forEach((q, j) => q.text = data[e.first].question[e.second].answer[j].text);
         });
       }
     });
@@ -121,7 +120,7 @@ export class WorkPage {
   }
 
   answerQuestion(index, nextQuestionIndex){
-    if(this.currentQuestion.answer_index==-1){
+    if(this.currentQuestion.answer_index===-1){
       this.currentQuestion.answer_index = index;
       this.currentQuestion.answer_index = index;
       if(this.currentQuestion.answer[this.currentQuestion.answer_index.toString()].correct) this.storeData(true);
